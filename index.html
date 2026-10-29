@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#09030A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="A timeless romantic surprise created by Hasban Zahidh for Raahitha — Forever in my heart.">
+  <meta property="og:title" content="Raahitha — Forever In My Heart ❤️">
+  <meta property="og:description" content="A cinematic romantic surprise for Raahitha from Hasban Zahidh.">
+  <meta property="og:type" content="website">
+
+  <title>Raahitha — Forever In My Heart ❤️ | Hasban Zahidh</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient cinematic background glow and lighting -->
+  <div class="ambient-glow" aria-hidden="true"></div>
+  <div class="vignette-layer" aria-hidden="true"></div>
+
+  <!-- Efficient 2D Canvas for particle universe (stars, petals, floating hearts, sparkles) -->
+  <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+  <!-- Main Interactive Experience Stage -->
+  <main class="experience-stage" id="stage">
+
+    <!-- Screen 1: The Initial Touch Screen -->
+    <section class="screen screen-intro active" id="introScreen" aria-label="Introduction Screen">
+      <div class="intro-header">
+        <span class="eyebrow-text">A LITTLE SURPRISE FOR YOU</span>
+        <h1 class="recipient-title" id="recipientName">Raahitha <span class="sparkle-heart" aria-hidden="true">❤️</span></h1>
+        <p class="special-girl-tag">My Special Girl</p>
+      </div>
+
+      <!-- The Central Heart Interaction Anchor -->
+      <div class="heart-stage-wrapper">
+        <div class="orbit-glow-ring ring-1" aria-hidden="true"></div>
+        <div class="orbit-glow-ring ring-2" aria-hidden="true"></div>
+        <div class="orbit-glow-ring ring-3" aria-hidden="true"></div>
+
+        <button 
+          type="button" 
+          class="main-heart-btn" 
+          id="mainHeartBtn" 
+          aria-label="Touch My Heart, Raahitha" 
+          title="Touch My Heart, Raahitha"
+        >
+          <!-- SVG layered heart structure with split halves and crack effect -->
+          <svg class="heart-svg" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+            <defs>
+              <!-- Outer romantic gradient -->
+              <radialGradient id="rubyGlowGrad" cx="50%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#FF91C8" />
+                <stop offset="25%" stop-color="#FF174F" />
+                <stop offset="70%" stop-color="#A30826" />
+                <stop offset="100%" stop-color="#40000C" />
+              </radialGradient>
+
+              <!-- Realistic specular glossy highlight -->
+              <linearGradient id="glossGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.85" />
+                <stop offset="45%" stop-color="#FF91C8" stop-opacity="0.3" />
+                <stop offset="100%" stop-color="#FF174F" stop-opacity="0" />
+              </linearGradient>
+
+              <!-- Crack luminescence -->
+              <linearGradient id="crackLightGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFFFFF" />
+                <stop offset="50%" stop-color="#FF91C8" />
+                <stop offset="100%" stop-color="#FF174F" />
+              </linearGradient>
+
+              <filter id="softGlowFilter" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur stdDeviation="6" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+            </defs>
+
+            <!-- Glow base under heart -->
+            <path 
+              class="heart-shadow-layer"
+              d="M 100,175 C 65,145 20,105 20,62 C 20,32 44,14 74,14 C 88,14 96,21 100,28 C 104,21 112,14 126,14 C 156,14 180,32 180,62 C 180,105 135,145 100,175 Z"
+              fill="rgba(255, 23, 79, 0.45)"
+              filter="url(#softGlowFilter)"
+            />
+
+            <!-- Left Half of Heart -->
+            <g class="heart-piece piece-left" id="heartPieceLeft">
+              <path 
+                class="heart-body"
+                d="M 100,175 C 65,145 20,105 20,62 C 20,32 44,14 74,14 C 88,14 96,21 100,28 L 100,175 Z"
+                fill="url(#rubyGlowGrad)"
+              />
+              <!-- Realistic 3D highlight curve left -->
+              <path 
+                class="heart-highlight"
+                d="M 45,62 C 45,42 60,26 80,24 C 65,30 50,45 52,68 C 53,78 60,94 70,108 C 55,90 45,76 45,62 Z"
+                fill="url(#glossGrad)"
+              />
+            </g>
+
+            <!-- Right Half of Heart -->
+            <g class="heart-piece piece-right" id="heartPieceRight">
+              <path 
+                class="heart-body"
+                d="M 100,28 C 104,21 112,14 126,14 C 156,14 180,32 180,62 C 180,105 135,145 100,175 L 100,28 Z"
+                fill="url(#rubyGlowGrad)"
+              />
+              <!-- Realistic 3D highlight curve right -->
+              <path 
+                class="heart-highlight"
+                d="M 155,62 C 155,42 140,26 120,24 C 135,30 150,45 148,68 C 147,78 140,94 130,108 C 145,90 155,76 155,62 Z"
+                fill="url(#glossGrad)"
+              />
+            </g>
+
+            <!-- Elegant organic crack path (revealed during split) -->
+            <path 
+              class="heart-crack-line" 
+              id="heartCrackLine" 
+              d="M 100,28 L 98,54 L 104,78 L 96,104 L 103,132 L 99,152 L 100,175"
+              fill="none" 
+              stroke="url(#crackLightGrad)" 
+              stroke-width="3" 
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+
+          <!-- Core heart pulse ring waves -->
+          <span class="heart-pulse-wave wave-a" aria-hidden="true"></span>
+          <span class="heart-pulse-wave wave-b" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <div class="intro-footer-actions">
+        <p class="touch-prompt">Touch My Heart, My Love</p>
+        <p class="recipient-dedication">Raahitha, This Is For You ❤️</p>
+        <p class="subtle-whisper">One little touch. A thousand feelings.</p>
+      </div>
+    </section>
+
+    <!-- Intermediate Stage: Constellation & Emotional Transition -->
+    <section class="screen screen-interlude" id="interludeScreen" aria-hidden="true">
+      <div class="constellation-wrapper">
+        <div class="celestial-heart-glow" aria-hidden="true"></div>
+        <p class="interlude-quote" id="interludeQuote">
+          &ldquo;Even A Broken Heart Can Hold An Endless Love.&rdquo;
+        </p>
+      </div>
+    </section>
+
+    <!-- Screen 2: Final Love Letter Screen (Screenshot-Ready Romantic Wallpaper) -->
+    <section class="screen screen-letter" id="letterScreen" aria-label="Love Letter from Hasban Zahidh to Raahitha">
+      <div class="letter-scroll-wrapper">
+        <div class="romantic-card" id="romanticCard">
+          
+          <!-- Subtle decorative card corner flourishes -->
+          <div class="card-ornament top-ornament" aria-hidden="true">
+            <span class="ornament-line"></span>
+            <span class="ornament-heart">❦</span>
+            <span class="ornament-line"></span>
+          </div>
+
+          <!-- Luminous mini heart emblem -->
+          <div class="letter-heart-badge" aria-hidden="true">
+            <svg class="mini-luminous-heart" viewBox="0 0 100 100">
+              <path d="M 50,88 C 32,72 10,52 10,31 C 10,16 22,7 37,7 C 44,7 48,10 50,14 C 52,10 56,7 63,7 C 78,7 90,16 90,31 C 90,52 68,72 50,88 Z" />
+            </svg>
+          </div>
+
+          <!-- The Exact Final Love Letter Message -->
+          <header class="letter-header">
+            <h2 class="letter-recipient">Raahitha, My Love ❤️</h2>
+            <p class="letter-core-statement">I Love You Always.</p>
+          </header>
+
+          <div class="letter-body">
+            <p class="letter-line line-1">You Are Always In My Mind, In My Heart, And In My Life.</p>
+            <p class="letter-line line-2">My Heart May Break, But My Love For You Will Never Fade.</p>
+            <p class="letter-line line-3">No Matter The Distance, No Matter The Time, My Heart Will Always Choose You.</p>
+            <p class="letter-line line-4">You Are My Happiness, My Precious Memory, And Someone Truly Special To Me.</p>
+          </div>
+
+          <footer class="letter-signature-area">
+            <p class="sign-off">With All My Love,</p>
+            <p class="sender-name">Hasban Zahidh ❤️</p>
+          </footer>
+
+          <div class="card-ornament bottom-ornament" aria-hidden="true">
+            <span class="ornament-line"></span>
+            <span class="ornament-heart">❦</span>
+            <span class="ornament-line"></span>
+          </div>
+        </div>
+
+        <!-- Voice Narration Status & Subtitle Ribbon -->
+        <div class="voice-status-bar" id="voiceStatusBar" role="status" aria-live="polite">
+          <span class="voice-wave-icon" id="voiceWaveIcon" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </span>
+          <span class="voice-subtitle-text" id="voiceSubtitleText">Listening to my heart...</span>
+        </div>
+
+        <!-- Optional User Action Toolbar: Discreet, Accessible & Helpful -->
+        <div class="interactive-toolbar" id="interactiveToolbar">
+          <!-- Fallback button if mobile blocked autoplay speech -->
+          <button 
+            type="button" 
+            class="action-pill-btn voice-trigger-btn" 
+            id="voicePlayBtn"
+            aria-label="Hear Hasban's spoken message"
+          >
+            <span class="btn-icon">🎙️</span>
+            <span class="btn-label">Hear My Message</span>
+          </button>
+
+          <!-- Replay Voice Button -->
+          <button 
+            type="button" 
+            class="action-pill-btn" 
+            id="voiceReplayBtn" 
+            aria-label="Replay spoken narration"
+            title="Replay Voice Narration"
+          >
+            <span class="btn-icon">↺</span>
+            <span class="btn-label">Replay Voice</span>
+          </button>
+
+          <!-- Mute/Pause Voice Button -->
+          <button 
+            type="button" 
+            class="action-pill-btn" 
+            id="voiceMuteBtn" 
+            aria-label="Mute or Stop Voice Narration"
+            title="Stop Narration"
+          >
+            <span class="btn-icon" id="muteIcon">🔇</span>
+            <span class="btn-label" id="muteLabel">Stop Voice</span>
+          </button>
+
+          <!-- Save Love Card as Screenshot/Wallpaper PNG -->
+          <button 
+            type="button" 
+            class="action-pill-btn primary-action-btn" 
+            id="saveCardBtn" 
+            aria-label="Save Love Card as wallpaper image"
+            title="Save Romantic Love Card"
+          >
+            <span class="btn-icon">💌</span>
+            <span class="btn-label">Save Love Card</span>
+          </button>
+
+          <!-- Experience Replay Button -->
+          <button 
+            type="button" 
+            class="action-pill-btn" 
+            id="replayAllBtn" 
+            aria-label="Restart experience from the beginning"
+            title="Experience Again"
+          >
+            <span class="btn-icon">✨</span>
+            <span class="btn-label">Experience Again</span>
+          </button>
+        </div>
+
+        <!-- Subtle wallpaper note -->
+        <p class="wallpaper-hint">Take a screenshot or tap &ldquo;Save Love Card&rdquo; to keep this forever ❤️</p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Hidden canvas for high-resolution 1080x1920 Love Card generation -->
+  <canvas id="exportCanvas" width="1080" height="1920" style="display: none;" aria-hidden="true"></canvas>
+
+  <script src="script.js"></script>
+</body>
+</html>
