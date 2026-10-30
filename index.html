@@ -16,12 +16,32 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Ambient cinematic background glow and lighting -->
+  <!-- Ambient cinematic background glow, nebula and vignette lighting -->
   <div class="ambient-glow" aria-hidden="true"></div>
+  <div class="nebula-aurora" aria-hidden="true"></div>
   <div class="vignette-layer" aria-hidden="true"></div>
 
-  <!-- Efficient 2D Canvas for particle universe (stars, petals, floating hearts, sparkles) -->
+  <!-- Efficient 2D Canvas for particle universe (stars, petals, floating hearts, sparkles, meteors, touch trails) -->
   <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+  <!-- Top Floating Atmospheric Music & Experience Bar -->
+  <header class="top-experience-bar" id="topBar">
+    <div class="sender-badge" id="senderBadge" title="Created with eternal love by Hasban Zahidh">
+      <span class="badge-icon" aria-hidden="true">✨</span>
+      <span class="badge-text">Hasban Zahidh &rarr; Raahitha</span>
+    </div>
+
+    <button 
+      type="button" 
+      class="bgm-pill-btn" 
+      id="bgmToggleBtn" 
+      aria-label="Toggle Romantic Background Music"
+      title="Toggle Romantic Melodies"
+    >
+      <span class="disc-vinyl" id="discVinyl" aria-hidden="true">🎵</span>
+      <span class="bgm-label" id="bgmLabel">Melody: Off</span>
+    </button>
+  </header>
 
   <!-- Main Interactive Experience Stage -->
   <main class="experience-stage" id="stage">
@@ -40,6 +60,9 @@
         <div class="orbit-glow-ring ring-2" aria-hidden="true"></div>
         <div class="orbit-glow-ring ring-3" aria-hidden="true"></div>
 
+        <!-- Light rays burst background (revealed on activation) -->
+        <div class="divine-light-rays" id="lightRays" aria-hidden="true"></div>
+
         <button 
           type="button" 
           class="main-heart-btn" 
@@ -50,7 +73,7 @@
           <!-- SVG layered heart structure with split halves and crack effect -->
           <svg class="heart-svg" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
             <defs>
-              <!-- Outer romantic gradient -->
+              <!-- Outer romantic ruby/crimson gradient -->
               <radialGradient id="rubyGlowGrad" cx="50%" cy="35%" r="65%">
                 <stop offset="0%" stop-color="#FF91C8" />
                 <stop offset="25%" stop-color="#FF174F" />
@@ -60,15 +83,15 @@
 
               <!-- Realistic specular glossy highlight -->
               <linearGradient id="glossGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.85" />
-                <stop offset="45%" stop-color="#FF91C8" stop-opacity="0.3" />
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.88" />
+                <stop offset="45%" stop-color="#FF91C8" stop-opacity="0.35" />
                 <stop offset="100%" stop-color="#FF174F" stop-opacity="0" />
               </linearGradient>
 
               <!-- Crack luminescence -->
               <linearGradient id="crackLightGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stop-color="#FFFFFF" />
-                <stop offset="50%" stop-color="#FF91C8" />
+                <stop offset="50%" stop-color="#FFE4B5" />
                 <stop offset="100%" stop-color="#FF174F" />
               </linearGradient>
 
@@ -93,7 +116,6 @@
                 d="M 100,175 C 65,145 20,105 20,62 C 20,32 44,14 74,14 C 88,14 96,21 100,28 L 100,175 Z"
                 fill="url(#rubyGlowGrad)"
               />
-              <!-- Realistic 3D highlight curve left -->
               <path 
                 class="heart-highlight"
                 d="M 45,62 C 45,42 60,26 80,24 C 65,30 50,45 52,68 C 53,78 60,94 70,108 C 55,90 45,76 45,62 Z"
@@ -108,7 +130,6 @@
                 d="M 100,28 C 104,21 112,14 126,14 C 156,14 180,32 180,62 C 180,105 135,145 100,175 L 100,28 Z"
                 fill="url(#rubyGlowGrad)"
               />
-              <!-- Realistic 3D highlight curve right -->
               <path 
                 class="heart-highlight"
                 d="M 155,62 C 155,42 140,26 120,24 C 135,30 150,45 148,68 C 147,78 140,94 130,108 C 145,90 155,76 155,62 Z"
@@ -116,14 +137,14 @@
               />
             </g>
 
-            <!-- Elegant organic crack path (revealed during split) -->
+            <!-- Organic crack path revealed during split -->
             <path 
               class="heart-crack-line" 
               id="heartCrackLine" 
               d="M 100,28 L 98,54 L 104,78 L 96,104 L 103,132 L 99,152 L 100,175"
               fill="none" 
               stroke="url(#crackLightGrad)" 
-              stroke-width="3" 
+              stroke-width="3.5" 
               stroke-linecap="round"
               stroke-linejoin="round"
             />
@@ -149,15 +170,18 @@
         <p class="interlude-quote" id="interludeQuote">
           &ldquo;Even A Broken Heart Can Hold An Endless Love.&rdquo;
         </p>
+        <p class="interlude-subtext">Forever devoted &bull; Hasban Zahidh</p>
       </div>
     </section>
 
     <!-- Screen 2: Final Love Letter Screen (Screenshot-Ready Romantic Wallpaper) -->
     <section class="screen screen-letter" id="letterScreen" aria-label="Love Letter from Hasban Zahidh to Raahitha">
       <div class="letter-scroll-wrapper">
+        
+        <!-- The Romantic Card with 3D Parallax Tilt -->
         <div class="romantic-card" id="romanticCard">
           
-          <!-- Subtle decorative card corner flourishes -->
+          <!-- Decorative card corner flourishes -->
           <div class="card-ornament top-ornament" aria-hidden="true">
             <span class="ornament-line"></span>
             <span class="ornament-heart">❦</span>
@@ -178,15 +202,16 @@
           </header>
 
           <div class="letter-body">
-            <p class="letter-line line-1">You Are Always In My Mind, In My Heart, And In My Life.</p>
-            <p class="letter-line line-2">My Heart May Break, But My Love For You Will Never Fade.</p>
-            <p class="letter-line line-3">No Matter The Distance, No Matter The Time, My Heart Will Always Choose You.</p>
-            <p class="letter-line line-4">You Are My Happiness, My Precious Memory, And Someone Truly Special To Me.</p>
+            <p class="letter-line line-1" id="line1">You Are Always In My Mind, In My Heart, And In My Life.</p>
+            <p class="letter-line line-2" id="line2">My Heart May Break, But My Love For You Will Never Fade.</p>
+            <p class="letter-line line-3" id="line3">No Matter The Distance, No Matter The Time, My Heart Will Always Choose You.</p>
+            <p class="letter-line line-4" id="line4">You Are My Happiness, My Precious Memory, And Someone Truly Special To Me.</p>
           </div>
 
           <footer class="letter-signature-area">
             <p class="sign-off">With All My Love,</p>
             <p class="sender-name">Hasban Zahidh ❤️</p>
+            <span class="eternal-tag">Forever Yours &bull; No Matter What</span>
           </footer>
 
           <div class="card-ornament bottom-ornament" aria-hidden="true">
@@ -215,6 +240,18 @@
           >
             <span class="btn-icon">🎙️</span>
             <span class="btn-label">Hear My Message</span>
+          </button>
+
+          <!-- Interactive Whispers of Hasban's Heart -->
+          <button 
+            type="button" 
+            class="action-pill-btn whisper-trigger-btn" 
+            id="whispersBtn" 
+            aria-label="Read a secret love whisper from Hasban"
+            title="A Secret Whisper for Raahitha"
+          >
+            <span class="btn-icon">💌</span>
+            <span class="btn-label">Hasban's Whispers</span>
           </button>
 
           <!-- Replay Voice Button -->
@@ -249,8 +286,8 @@
             aria-label="Save Love Card as wallpaper image"
             title="Save Romantic Love Card"
           >
-            <span class="btn-icon">💌</span>
-            <span class="btn-label">Save Love Card</span>
+            <span class="btn-icon">💎</span>
+            <span class="btn-label">Save Wallpaper</span>
           </button>
 
           <!-- Experience Replay Button -->
@@ -267,12 +304,34 @@
         </div>
 
         <!-- Subtle wallpaper note -->
-        <p class="wallpaper-hint">Take a screenshot or tap &ldquo;Save Love Card&rdquo; to keep this forever ❤️</p>
+        <p class="wallpaper-hint">Take a screenshot or tap &ldquo;Save Wallpaper&rdquo; to keep this forever ❤️</p>
 
       </div>
     </section>
 
   </main>
+
+  <!-- Interactive Love Whispers Modal / Drawer -->
+  <div class="whisper-modal-backdrop" id="whisperModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="whisperTitle">
+    <div class="whisper-card">
+      <div class="whisper-wax-seal" aria-hidden="true">💌</div>
+      <h3 class="whisper-title" id="whisperTitle">A Whisper From Hasban</h3>
+      <p class="whisper-to">To my precious Raahitha ❤️</p>
+      
+      <blockquote class="whisper-quote" id="whisperQuote">
+        &ldquo;Raahitha, your laughter is the sweetest melody my heart has ever known. In every universe, I would search for only you.&rdquo;
+      </blockquote>
+
+      <div class="whisper-actions">
+        <button type="button" class="action-pill-btn" id="nextWhisperBtn">
+          <span>Next Whisper ✨</span>
+        </button>
+        <button type="button" class="action-pill-btn primary-action-btn" id="closeWhisperBtn">
+          <span>Back To Love Letter ❤️</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Hidden canvas for high-resolution 1080x1920 Love Card generation -->
   <canvas id="exportCanvas" width="1080" height="1920" style="display: none;" aria-hidden="true"></canvas>

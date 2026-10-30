@@ -2,7 +2,7 @@
  * ============================================================================
  * PROJECT: RAAHITHA — FOREVER IN MY HEART ❤️
  * Hasban Zahidh → Raahitha
- * Production-Quality Romantic Cinematic Experience Engine
+ * Production-Quality Romantic Cinematic Experience Engine | 2.0 Ultra
  * ============================================================================
  */
 
@@ -21,11 +21,23 @@
     { text: 'Raahitha...', pauseAfter: 850, cardLineIndex: -1 },
     { text: 'Sometimes, words cannot explain what a heart feels.', pauseAfter: 650, cardLineIndex: 0 },
     { text: 'My heart may break into a thousand pieces, but every piece will still belong to you.', pauseAfter: 750, cardLineIndex: 1 },
-    { text: 'I am Hasban Zahidh.', pauseAfter: 600, cardLineIndex: -1 },
+    { text: 'I am Hasban Zahidh.', speechText: 'I am Hasban Zahidh.', pauseAfter: 700, cardLineIndex: -1 },
     { text: 'You are always in my thoughts, always in my heart, and always a special part of my life.', pauseAfter: 700, cardLineIndex: 0 },
     { text: 'No matter how difficult life becomes, my feelings for you are real, and I will always wish happiness for you.', pauseAfter: 750, cardLineIndex: 2 },
     { text: 'Raahitha, I love you always.', pauseAfter: 800, cardLineIndex: 1 },
-    { text: 'Forever yours, Hasban Zahidh.', pauseAfter: 500, cardLineIndex: 3 }
+    { text: 'Forever yours, Hasban Zahidh.', speechText: 'Forever yours, Hasban Zahidh.', pauseAfter: 500, cardLineIndex: 3 }
+  ];
+
+  // Intimate romantic whispers from Hasban Zahidh to Raahitha
+  const HASBAN_WHISPERS = [
+    "Raahitha, your laughter is the sweetest melody my heart has ever known. In every universe, I would search only for you.",
+    "Even in a sky full of stars, my eyes will always search only for you, my special girl.",
+    "With you, every silence is peaceful and every heartbeat feels like coming home.",
+    "My feelings for you are not written in pencil, Raahitha—they are etched into the deepest core of my soul.",
+    "No distance can ever diminish what I hold for you. Every sunrise whispers your name to my thoughts.",
+    "You are my favorite thought, my deepest joy, and my most cherished prayer.",
+    "A heart that truly loves never forgets. Through every twist of destiny, my heart will always choose you.",
+    "Raahitha, you are forever in my heart. With all my devotion, Hasban Zahidh ❤️"
   ];
 
   /* --------------------------------------------------------------------------
@@ -39,6 +51,8 @@
   const interludeScreen = document.getElementById('interludeScreen');
   const letterScreen = document.getElementById('letterScreen');
   const ambientGlow = document.querySelector('.ambient-glow');
+  const lightRays = document.getElementById('lightRays');
+  const romanticCard = document.getElementById('romanticCard');
 
   const mainHeartBtn = document.getElementById('mainHeartBtn');
   const letterLines = document.querySelectorAll('.letter-line');
@@ -55,6 +69,15 @@
   const saveCardBtn = document.getElementById('saveCardBtn');
   const replayAllBtn = document.getElementById('replayAllBtn');
 
+  const bgmToggleBtn = document.getElementById('bgmToggleBtn');
+  const bgmLabel = document.getElementById('bgmLabel');
+
+  const whispersBtn = document.getElementById('whispersBtn');
+  const whisperModal = document.getElementById('whisperModal');
+  const whisperQuote = document.getElementById('whisperQuote');
+  const nextWhisperBtn = document.getElementById('nextWhisperBtn');
+  const closeWhisperBtn = document.getElementById('closeWhisperBtn');
+
   /* --------------------------------------------------------------------------
      3. STATE MANAGEMENT
      -------------------------------------------------------------------------- */
@@ -63,20 +86,23 @@
     isAnimating: false,
     isVoicePlaying: false,
     isMuted: false,
+    isBgmPlaying: false,
     speechIndex: 0,
     hasRealAudio: false,
-    audioContext: null,
+    currentWhisperIndex: 0,
     rafId: null,
     isTabVisible: true
   };
 
   /* --------------------------------------------------------------------------
-     4. NATIVE WEB AUDIO SYNTHESIZER (Pure zero-dependency cinematic sound)
+     4. NATIVE WEB AUDIO ENGINE (Zero dependencies, Pure Procedural Music & FX)
      -------------------------------------------------------------------------- */
   class RomanticAudioEngine {
     constructor() {
       this.ctx = null;
       this.isInitialized = false;
+      this.bgmTimer = null;
+      this.chordStep = 0;
     }
 
     init() {
@@ -95,7 +121,7 @@
       }
     }
 
-    // Gentle sub-bass heartbeat thump
+    // Play a gentle sub-bass heartbeat thump
     playHeartbeatThump(intensity = 1.0) {
       if (!this.ctx || STATE.isMuted) return;
       try {
@@ -107,7 +133,7 @@
         osc.frequency.setValueAtTime(60, now);
         osc.frequency.exponentialRampToValueAtTime(28, now + 0.18);
 
-        gain.gain.setValueAtTime(0.35 * intensity, now);
+        gain.gain.setValueAtTime(0.38 * intensity, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
 
         osc.connect(gain);
@@ -115,9 +141,7 @@
 
         osc.start(now);
         osc.stop(now + 0.25);
-      } catch (e) {
-        // Safe fallback
-      }
+      } catch (e) {}
     }
 
     // Ethereal romantic chime chord
@@ -177,12 +201,83 @@
         });
       } catch (e) {}
     }
+
+    // Ambient Romantic Lullaby BGM (Procedural piano chords in F Major / D Minor)
+    startBGM() {
+      if (!this.ctx) this.init();
+      if (!this.ctx) return;
+      STATE.isBgmPlaying = true;
+      if (bgmToggleBtn) {
+        bgmToggleBtn.classList.add('is-playing');
+        bgmLabel.textContent = 'Melody: Playing';
+      }
+
+      const chordProgression = [
+        [174.61, 261.63, 329.63, 349.23, 440.00], // F Maj7
+        [130.81, 196.00, 246.94, 329.63, 392.00], // C Maj9
+        [146.83, 220.00, 261.63, 349.23, 440.00], // D min9
+        [116.54, 174.61, 233.08, 293.66, 349.23]  // Bb Maj7
+      ];
+
+      const playNextChord = () => {
+        if (!STATE.isBgmPlaying || !this.ctx || STATE.isMuted) return;
+        const now = this.ctx.currentTime;
+        const chord = chordProgression[this.chordStep % chordProgression.length];
+        this.chordStep++;
+
+        chord.forEach((freq, idx) => {
+          try {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            const filter = this.ctx.createBiquadFilter();
+
+            osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(1200, now);
+
+            gain.gain.setValueAtTime(0.0001, now + idx * 0.12);
+            gain.gain.linearRampToValueAtTime(0.024, now + idx * 0.12 + 0.25);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.12 + 3.8);
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(this.ctx.destination);
+
+            osc.start(now + idx * 0.12);
+            osc.stop(now + idx * 0.12 + 4.0);
+          } catch (e) {}
+        });
+
+        this.bgmTimer = setTimeout(playNextChord, 4200);
+      };
+
+      playNextChord();
+    }
+
+    stopBGM() {
+      STATE.isBgmPlaying = false;
+      clearTimeout(this.bgmTimer);
+      if (bgmToggleBtn) {
+        bgmToggleBtn.classList.remove('is-playing');
+        bgmLabel.textContent = 'Melody: Off';
+      }
+    }
+
+    toggleBGM() {
+      if (STATE.isBgmPlaying) {
+        this.stopBGM();
+      } else {
+        this.startBGM();
+      }
+    }
   }
 
   const romanticAudio = new RomanticAudioEngine();
 
   /* --------------------------------------------------------------------------
-     5. SPOKEN NARRATION ENGINE (SpeechSynthesis + Real Voice Recording option)
+     5. SPOKEN NARRATION ENGINE (SpeechSynthesis with Clear Articulation)
      -------------------------------------------------------------------------- */
   class RomanticNarrationEngine {
     constructor() {
@@ -198,7 +293,6 @@
       this.initSpeechVoices();
     }
 
-    // Detect if an authentic recording by Hasban Zahidh is located in assets/
     checkRealAudio() {
       try {
         const audio = new Audio();
@@ -232,11 +326,9 @@
       }
     }
 
-    // Select the warmest, most natural-sounding English voice available
     pickWarmestVoice() {
       if (!this.voices || this.voices.length === 0) return null;
 
-      // Priority list of high quality romantic/natural voices
       const voicePreferences = [
         /Google US English/i,
         /Samantha/i,
@@ -271,17 +363,14 @@
 
       this.updateUIStatus(true, 'Starting spoken message...');
 
-      // Priority 1: Real audio file if supplied
       if (STATE.hasRealAudio && this.realAudioPlayer) {
         this.playRealVoice();
         return;
       }
 
-      // Priority 2: Web Speech Synthesis
       if (this.supportsSpeech) {
         this.speakNextSentence();
       } else {
-        // Fallback: visual subtitle only
         this.displayVisualNarration();
       }
     }
@@ -299,9 +388,12 @@
       this.updateSubtitle(current.text);
 
       try {
-        window.speechSynthesis.cancel(); // clean up previous
+        window.speechSynthesis.cancel();
 
-        const utterance = new SpeechSynthesisUtterance(current.text);
+        // Use clean utterance for clear articulation of "Hasban Zahidh"
+        const textToSpeak = current.speechText || current.text;
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+
         if (!this.selectedVoice) {
           this.selectedVoice = this.pickWarmestVoice();
         }
@@ -309,9 +401,9 @@
           utterance.voice = this.selectedVoice;
         }
 
-        // Pacing adjustments for gentle, romantic tone
-        utterance.rate = 0.88;
-        utterance.pitch = 1.0;
+        // Pacing adjustments: gentle, calm, romantic
+        utterance.rate = 0.85;
+        utterance.pitch = 0.98;
         utterance.lang = 'en-US';
 
         utterance.onend = () => {
@@ -322,12 +414,9 @@
         };
 
         utterance.onerror = (e) => {
-          console.warn('Speech error or cancelled:', e);
-          // If browser blocked autoplay speech, show the manual hear button
           if (e.error === 'not-allowed' || e.error === 'audio-busy') {
             this.showManualPlayPrompt();
           } else {
-            // Advance anyway
             STATE.speechIndex++;
             this.speakNextSentence();
           }
@@ -336,7 +425,6 @@
         this.activeUtterance = utterance;
         window.speechSynthesis.speak(utterance);
       } catch (err) {
-        console.warn('Speech synthesis call failed:', err);
         this.showManualPlayPrompt();
       }
     }
@@ -346,8 +434,7 @@
       this.realAudioPlayer.play().then(() => {
         this.updateSubtitle('Playing Hasban’s voice recording...');
         this.realAudioPlayer.onended = () => this.onNarrationComplete();
-      }).catch(err => {
-        console.warn('Autoplay of real audio blocked, falling back:', err);
+      }).catch(() => {
         this.showManualPlayPrompt();
       });
     }
@@ -390,7 +477,7 @@
       this.isSpeaking = false;
       STATE.isVoicePlaying = false;
       this.highlightCardLine(-1);
-      this.updateUIStatus(false, 'Forever in my heart ❤️');
+      this.updateUIStatus(false, 'Forever in my heart ❤️ — Hasban Zahidh');
     }
 
     highlightCardLine(lineIndex) {
@@ -426,14 +513,14 @@
       if (voicePlayBtn) {
         voicePlayBtn.style.display = 'inline-flex';
       }
-      this.updateSubtitle('Tap "Hear My Message" to start voice narration');
+      this.updateSubtitle('Tap "Hear My Message" to hear Hasban’s voice ❤️');
     }
   }
 
   const narrationEngine = new RomanticNarrationEngine();
 
   /* --------------------------------------------------------------------------
-     6. HIGH-PERFORMANCE 2D PARTICLE ENGINE
+     6. ADVANCED 2D PARTICLE ENGINE (Shooting Stars, Petals, Touch Fairy Dust)
      -------------------------------------------------------------------------- */
   class ParticleEngine {
     constructor(canvas, ctx) {
@@ -445,11 +532,13 @@
 
       this.particles = [];
       this.burstParticles = [];
+      this.shootingStars = [];
+      this.touchParticles = [];
       this.constellationParticles = [];
       this.constellationActive = false;
 
-      // Performance cap based on device screen size
-      this.maxAmbient = this.width < 600 ? 55 : 100;
+      this.maxAmbient = this.width < 600 ? 60 : 110;
+      this.lastShootingStar = Date.now();
 
       this.initCanvasSize();
       this.seedAmbientUniverse();
@@ -461,7 +550,7 @@
       this.height = window.innerHeight;
       this.canvas.width = Math.floor(this.width * this.dpr);
       this.canvas.height = Math.floor(this.height * this.dpr);
-      this.ctx.setTransform(1, 0, 0, 1, 0, 0); // reset
+      this.ctx.setTransform(1, 0, 0, 1, 0, 0);
       this.ctx.scale(this.dpr, this.dpr);
     }
 
@@ -473,9 +562,38 @@
       document.addEventListener('visibilitychange', () => {
         STATE.isTabVisible = !document.hidden;
       });
+
+      // Interactive Touch & Cursor Fairy Dust Trail
+      const addTouchFairyDust = (x, y) => {
+        const count = 3;
+        for (let i = 0; i < count; i++) {
+          this.touchParticles.push({
+            x: x + (Math.random() - 0.5) * 16,
+            y: y + (Math.random() - 0.5) * 16,
+            vx: (Math.random() - 0.5) * 1.8,
+            vy: (Math.random() - 0.7) * 2.2,
+            size: Math.random() * 6 + 2,
+            alpha: 1,
+            decay: Math.random() * 0.025 + 0.015,
+            color: Math.random() > 0.4 ? '#FF91C8' : '#FFE4B5',
+            isHeart: Math.random() > 0.5,
+            rotation: Math.random() * Math.PI * 2,
+            rotSpeed: (Math.random() - 0.5) * 0.1
+          });
+        }
+      };
+
+      window.addEventListener('mousemove', (e) => {
+        addTouchFairyDust(e.clientX, e.clientY);
+      }, { passive: true });
+
+      window.addEventListener('touchmove', (e) => {
+        if (e.touches && e.touches[0]) {
+          addTouchFairyDust(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      }, { passive: true });
     }
 
-    // Seed ambient particles (mini floating hearts, sparkling stars, bokeh, petals)
     seedAmbientUniverse() {
       this.particles = [];
       for (let i = 0; i < this.maxAmbient; i++) {
@@ -485,7 +603,7 @@
 
     createAmbientParticle(randomY = false) {
       const types = ['heart', 'star', 'bokeh', 'petal'];
-      const typeWeights = [0.35, 0.3, 0.2, 0.15];
+      const typeWeights = [0.35, 0.3, 0.15, 0.2];
       const r = Math.random();
       let type = 'heart';
       let acc = 0;
@@ -497,7 +615,7 @@
         }
       }
 
-      const colors = ['#FF91C8', '#FF174F', '#FFFFFF', '#FFD2E7', '#A30826'];
+      const colors = ['#FF91C8', '#FF174F', '#FFFFFF', '#FFD2E7', '#A30826', '#FFE4B5'];
       const color = colors[Math.floor(Math.random() * colors.length)];
 
       return {
@@ -508,21 +626,37 @@
         speedY: -(Math.random() * 0.55 + 0.25),
         speedX: (Math.random() - 0.5) * 0.45,
         alpha: Math.random() * 0.65 + 0.25,
-        maxAlpha: Math.random() * 0.65 + 0.25,
         color: color,
         rotation: Math.random() * Math.PI * 2,
         rotSpeed: (Math.random() - 0.5) * 0.02,
         swayOffset: Math.random() * 100,
-        swaySpeed: Math.random() * 0.015 + 0.005
+        swaySpeed: Math.random() * 0.015 + 0.005,
+        petalPitch: Math.random() * Math.PI
       };
     }
 
-    // Create explosion burst from center heart position (Phase B)
-    triggerHeartBurst(originX, originY, count = 160) {
-      const colors = ['#FFFFFF', '#FF91C8', '#FF174F', '#FFD2E7', '#FFE4B5'];
+    triggerShootingStar() {
+      const startX = Math.random() * (this.width * 0.8);
+      const startY = Math.random() * (this.height * 0.4);
+      const angle = Math.PI / 4 + (Math.random() - 0.5) * 0.2;
+      const speed = Math.random() * 9 + 11;
+
+      this.shootingStars.push({
+        x: startX,
+        y: startY,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        length: Math.random() * 110 + 80,
+        alpha: 1,
+        decay: 0.02
+      });
+    }
+
+    triggerHeartBurst(originX, originY, count = 180) {
+      const colors = ['#FFFFFF', '#FF91C8', '#FF174F', '#FFD2E7', '#FFE4B5', '#FFD700'];
       for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = Math.random() * 9 + 2.5;
+        const speed = Math.random() * 9.5 + 2.8;
         this.burstParticles.push({
           x: originX,
           y: originY,
@@ -541,21 +675,20 @@
       }
     }
 
-    // Shard particles floating from the broken heart (Phase C)
-    triggerBrokenShards(originX, originY, count = 40) {
+    triggerBrokenShards(originX, originY, count = 45) {
       for (let i = 0; i < count; i++) {
         const angle = (Math.random() > 0.5 ? 0 : Math.PI) + (Math.random() - 0.5) * 1.2;
-        const speed = Math.random() * 3.5 + 1.2;
+        const speed = Math.random() * 3.8 + 1.2;
         this.burstParticles.push({
           x: originX + (Math.random() - 0.5) * 30,
           y: originY + (Math.random() - 0.5) * 30,
           vx: Math.cos(angle) * speed,
           vy: (Math.random() - 0.7) * 2,
           drag: 0.97,
-          gravity: -0.015, // float gently upward
-          size: Math.random() * 6 + 2,
+          gravity: -0.015,
+          size: Math.random() * 6.5 + 2,
           color: '#FF174F',
-          alpha: 0.9,
+          alpha: 0.95,
           decay: 0.006,
           isHeart: false,
           isCrystal: true,
@@ -565,16 +698,14 @@
       }
     }
 
-    // Phase D: Build Constellation Heart outline
     buildHeartConstellation(centerX, centerY) {
       this.constellationActive = true;
       this.constellationParticles = [];
-      const numPoints = this.width < 600 ? 36 : 52;
+      const numPoints = this.width < 600 ? 38 : 56;
       const scale = Math.min(this.width, this.height) * 0.22;
 
       for (let i = 0; i < numPoints; i++) {
         const t = (i / numPoints) * Math.PI * 2;
-        // Parametric heart formula
         const hx = 16 * Math.pow(Math.sin(t), 3);
         const hy = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
 
@@ -586,7 +717,7 @@
           targetY: targetY,
           x: targetX + (Math.random() - 0.5) * 350,
           y: targetY + (Math.random() - 0.5) * 350,
-          size: Math.random() * 3 + 2.5,
+          size: Math.random() * 3.5 + 2.5,
           alpha: 0,
           targetAlpha: Math.random() * 0.5 + 0.5,
           pulse: Math.random() * Math.PI
@@ -636,29 +767,28 @@
     }
 
     updateAndRender() {
-      if (!STATE.isTabVisible) {
-        return;
-      }
-
+      if (!STATE.isTabVisible) return;
       this.ctx.clearRect(0, 0, this.width, this.height);
+
+      // Periodic Shooting Star spawn
+      if (Date.now() - this.lastShootingStar > 4200) {
+        this.triggerShootingStar();
+        this.lastShootingStar = Date.now();
+      }
 
       // 1. Render Ambient Universe
       for (let i = 0; i < this.particles.length; i++) {
         const p = this.particles[i];
-
-        // Horizontal sway
         p.swayOffset += p.swaySpeed;
         p.x += p.speedX + Math.sin(p.swayOffset) * 0.4;
         p.y += p.speedY;
         p.rotation += p.rotSpeed;
 
-        // Reset if drifted beyond top
         if (p.y < -30 || p.x < -30 || p.x > this.width + 30) {
           this.particles[i] = this.createAmbientParticle(false);
           continue;
         }
 
-        // Draw by type
         if (p.type === 'heart') {
           this.drawHeartShape(p.x, p.y, p.size, p.color, p.alpha, p.rotation);
         } else if (p.type === 'star') {
@@ -672,19 +802,72 @@
           this.ctx.fill();
           this.ctx.restore();
         } else if (p.type === 'petal') {
+          p.petalPitch += 0.02;
           this.ctx.save();
           this.ctx.translate(p.x, p.y);
           this.ctx.rotate(p.rotation);
-          this.ctx.globalAlpha = p.alpha * 0.75;
+          this.ctx.globalAlpha = p.alpha * 0.8;
           this.ctx.fillStyle = '#FF91C8';
           this.ctx.beginPath();
-          this.ctx.ellipse(0, 0, p.size, p.size * 0.45, Math.PI / 4, 0, Math.PI * 2);
+          this.ctx.ellipse(0, 0, p.size, p.size * (0.35 + Math.sin(p.petalPitch) * 0.15), Math.PI / 4, 0, Math.PI * 2);
           this.ctx.fill();
           this.ctx.restore();
         }
       }
 
-      // 2. Render Burst & Shard Particles
+      // 2. Render Interactive Touch/Cursor Fairy Dust
+      for (let i = this.touchParticles.length - 1; i >= 0; i--) {
+        const tp = this.touchParticles[i];
+        tp.x += tp.vx;
+        tp.y += tp.vy;
+        tp.alpha -= tp.decay;
+        tp.rotation += tp.rotSpeed;
+
+        if (tp.alpha <= 0) {
+          this.touchParticles.splice(i, 1);
+          continue;
+        }
+
+        if (tp.isHeart) {
+          this.drawHeartShape(tp.x, tp.y, tp.size, tp.color, tp.alpha, tp.rotation);
+        } else {
+          this.drawSparkleStar(tp.x, tp.y, tp.size, tp.color, tp.alpha);
+        }
+      }
+
+      // 3. Render Shooting Stars
+      for (let i = this.shootingStars.length - 1; i >= 0; i--) {
+        const star = this.shootingStars[i];
+        star.x += star.vx;
+        star.y += star.vy;
+        star.alpha -= star.decay;
+
+        if (star.alpha <= 0) {
+          this.shootingStars.splice(i, 1);
+          continue;
+        }
+
+        const tailX = star.x - (star.vx / 14) * star.length;
+        const tailY = star.y - (star.vy / 14) * star.length;
+
+        const grad = this.ctx.createLinearGradient(star.x, star.y, tailX, tailY);
+        grad.addColorStop(0, `rgba(255, 255, 255, ${star.alpha})`);
+        grad.addColorStop(0.3, `rgba(255, 145, 200, ${star.alpha * 0.8})`);
+        grad.addColorStop(1, 'rgba(255, 23, 79, 0)');
+
+        this.ctx.save();
+        this.ctx.strokeStyle = grad;
+        this.ctx.lineWidth = 2;
+        this.ctx.beginPath();
+        this.ctx.moveTo(star.x, star.y);
+        this.ctx.lineTo(tailX, tailY);
+        this.ctx.stroke();
+
+        this.drawSparkleStar(star.x, star.y, 4, '#FFFFFF', star.alpha);
+        this.ctx.restore();
+      }
+
+      // 4. Render Burst & Shard Particles
       for (let i = this.burstParticles.length - 1; i >= 0; i--) {
         const bp = this.burstParticles[i];
         bp.x += bp.vx;
@@ -702,7 +885,6 @@
         if (bp.isHeart) {
           this.drawHeartShape(bp.x, bp.y, bp.size, bp.color, bp.alpha, bp.rotation);
         } else if (bp.isCrystal) {
-          // Sharp ruby shards
           this.ctx.save();
           this.ctx.translate(bp.x, bp.y);
           this.ctx.rotate(bp.rotation);
@@ -720,33 +902,27 @@
         }
       }
 
-      // 3. Render Constellation Heart (Phase D)
+      // 5. Render Constellation Heart (Phase D)
       if (this.constellationActive && this.constellationParticles.length > 0) {
-        // Draw connecting ethereal lines between consecutive stars
         this.ctx.save();
-        this.ctx.strokeStyle = 'rgba(255, 145, 200, 0.35)';
+        this.ctx.strokeStyle = 'rgba(255, 145, 200, 0.4)';
         this.ctx.lineWidth = 1;
         this.ctx.beginPath();
 
         for (let i = 0; i < this.constellationParticles.length; i++) {
           const cp = this.constellationParticles[i];
-          // Ease toward target
           cp.x += (cp.targetX - cp.x) * 0.055;
           cp.y += (cp.targetY - cp.y) * 0.055;
           cp.alpha += (cp.targetAlpha - cp.alpha) * 0.04;
           cp.pulse += 0.04;
 
-          if (i === 0) {
-            this.ctx.moveTo(cp.x, cp.y);
-          } else {
-            this.ctx.lineTo(cp.x, cp.y);
-          }
+          if (i === 0) this.ctx.moveTo(cp.x, cp.y);
+          else this.ctx.lineTo(cp.x, cp.y);
         }
         this.ctx.closePath();
         this.ctx.stroke();
         this.ctx.restore();
 
-        // Draw star nodes
         for (let i = 0; i < this.constellationParticles.length; i++) {
           const cp = this.constellationParticles[i];
           const pulsingSize = cp.size + Math.sin(cp.pulse) * 1.2;
@@ -765,7 +941,38 @@
   STATE.rafId = requestAnimationFrame(mainLoop);
 
   /* --------------------------------------------------------------------------
-     7. CHOREOGRAPHED CINEMATIC ANIMATION TIMELINE
+     7. 3D PARALLAX TILT ENGINE
+     -------------------------------------------------------------------------- */
+  function setup3DCardParallax() {
+    if (!romanticCard) return;
+
+    let targetRotX = 0;
+    let targetRotY = 0;
+    let currentRotX = 0;
+    let currentRotY = 0;
+
+    window.addEventListener('mousemove', (e) => {
+      const halfW = window.innerWidth / 2;
+      const halfH = window.innerHeight / 2;
+      targetRotX = -((e.clientY - halfH) / halfH) * 8; // -8 to +8 deg
+      targetRotY = ((e.clientX - halfW) / halfW) * 8;
+    }, { passive: true });
+
+    // Smooth lerp loop
+    function updateTilt() {
+      currentRotX += (targetRotX - currentRotX) * 0.08;
+      currentRotY += (targetRotY - currentRotY) * 0.08;
+      if (romanticCard) {
+        romanticCard.style.transform = `perspective(1200px) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg)`;
+      }
+      requestAnimationFrame(updateTilt);
+    }
+    updateTilt();
+  }
+  setup3DCardParallax();
+
+  /* --------------------------------------------------------------------------
+     8. CHOREOGRAPHED CINEMATIC ANIMATION TIMELINE
      -------------------------------------------------------------------------- */
   function getHeartCenterCoordinates() {
     const rect = mainHeartBtn.getBoundingClientRect();
@@ -779,39 +986,36 @@
     if (STATE.isAnimating || STATE.currentPhase !== 'INTRO') return;
     STATE.isAnimating = true;
 
-    // Wake up Web Audio API from user touch gesture
+    // Wake up Web Audio and start gentle romantic melodies
     romanticAudio.init();
+    if (!STATE.isBgmPlaying) {
+      romanticAudio.startBGM();
+    }
 
     const center = getHeartCenterCoordinates();
 
-    // ----------------------------------------------------
-    // PHASE A: THE HEARTBEAT (~0s - 2.5s)
-    // ----------------------------------------------------
+    // PHASE A: THE HEARTBEAT
     STATE.currentPhase = 'HEARTBEAT';
     mainHeartBtn.classList.add('beating-rapid');
     if (ambientGlow) ambientGlow.classList.add('heartbeat-active');
+    if (lightRays) lightRays.classList.add('active');
 
-    // Play heartbeat rhythmic pulses
-    romanticAudio.playHeartbeatThump(0.8);
+    romanticAudio.playHeartbeatThump(0.85);
     setTimeout(() => romanticAudio.playHeartbeatThump(1.0), 300);
-    setTimeout(() => romanticAudio.playHeartbeatThump(0.9), 700);
+    setTimeout(() => romanticAudio.playHeartbeatThump(0.95), 700);
     setTimeout(() => romanticAudio.playHeartbeatThump(1.2), 1000);
-    setTimeout(() => romanticAudio.playHeartbeatThump(1.3), 1400);
-    setTimeout(() => romanticAudio.playHeartbeatThump(1.4), 1800);
+    setTimeout(() => romanticAudio.playHeartbeatThump(1.35), 1400);
+    setTimeout(() => romanticAudio.playHeartbeatThump(1.45), 1800);
 
-    // ----------------------------------------------------
-    // PHASE B: THE MAGICAL BURST (~2.2s - 4.5s)
-    // ----------------------------------------------------
+    // PHASE B: THE MAGICAL BURST
     setTimeout(() => {
       STATE.currentPhase = 'BURST';
       romanticAudio.playRomanticChord();
       romanticAudio.playSparkleChime();
-      particleEngine.triggerHeartBurst(center.x, center.y, 180);
+      particleEngine.triggerHeartBurst(center.x, center.y, 200);
     }, 2200);
 
-    // ----------------------------------------------------
-    // PHASE C: THE BROKEN HEART (~4.5s - 7.5s)
-    // ----------------------------------------------------
+    // PHASE C: THE BROKEN HEART
     setTimeout(() => {
       STATE.currentPhase = 'SPLIT';
       mainHeartBtn.classList.remove('beating-rapid');
@@ -822,17 +1026,14 @@
       }
 
       romanticAudio.playHeartbeatThump(0.7);
-      particleEngine.triggerBrokenShards(center.x, center.y, 45);
+      particleEngine.triggerBrokenShards(center.x, center.y, 50);
     }, 4500);
 
-    // ----------------------------------------------------
-    // PHASE D: LOVE SURVIVES (~7.5s - 11.0s)
-    // ----------------------------------------------------
+    // PHASE D: LOVE SURVIVES
     setTimeout(() => {
       STATE.currentPhase = 'CONSTELLATION';
       mainHeartBtn.classList.add('dissolving');
 
-      // Hide intro screen, show emotional interlude
       introScreen.classList.remove('active');
       interludeScreen.classList.add('active');
 
@@ -840,9 +1041,7 @@
       particleEngine.buildHeartConstellation(window.innerWidth / 2, window.innerHeight * 0.38);
     }, 7600);
 
-    // ----------------------------------------------------
-    // TRANSITION TO FINAL LOVE LETTER SCREEN (~11.5s)
-    // ----------------------------------------------------
+    // TRANSITION TO FINAL LOVE LETTER SCREEN
     setTimeout(() => {
       STATE.currentPhase = 'LETTER';
       interludeScreen.classList.remove('active');
@@ -851,7 +1050,6 @@
       particleEngine.clearConstellation();
       STATE.isAnimating = false;
 
-      // Start Spoken Love Message automatically (handles browser block gracefully)
       setTimeout(() => {
         narrationEngine.startNarration();
       }, 800);
@@ -859,7 +1057,7 @@
   }
 
   /* --------------------------------------------------------------------------
-     8. SAVE LOVE CARD FEATURE (High-Resolution Mobile Wallpaper Generator)
+     9. SAVE LOVE CARD FEATURE (1080x1920 Ultra High-Res Mobile Wallpaper)
      -------------------------------------------------------------------------- */
   function generateAndDownloadLoveCard() {
     try {
@@ -869,42 +1067,42 @@
       const h = 1920;
 
       // 1. Deep romantic cinematic gradient background
-      const bgGrad = expCtx.createRadialGradient(w / 2, h * 0.35, 100, w / 2, h / 2, h * 0.7);
+      const bgGrad = expCtx.createRadialGradient(w / 2, h * 0.35, 100, w / 2, h / 2, h * 0.75);
       bgGrad.addColorStop(0, '#40000C');
-      bgGrad.addColorStop(0.5, '#200006');
+      bgGrad.addColorStop(0.45, '#200006');
       bgGrad.addColorStop(1, '#09030A');
       expCtx.fillStyle = bgGrad;
       expCtx.fillRect(0, 0, w, h);
 
-      // 2. Ambient sparkles & stars on card
+      // 2. Cosmic nebula sparkle dust
       expCtx.fillStyle = 'rgba(255, 145, 200, 0.4)';
-      for (let i = 0; i < 75; i++) {
+      for (let i = 0; i < 90; i++) {
         const sx = Math.random() * w;
         const sy = Math.random() * h;
-        const sr = Math.random() * 2.5 + 1;
+        const sr = Math.random() * 2.8 + 1;
         expCtx.beginPath();
         expCtx.arc(sx, sy, sr, 0, Math.PI * 2);
         expCtx.fill();
       }
 
-      // 3. Luxurious border & corner ornaments
-      expCtx.strokeStyle = 'rgba(255, 145, 200, 0.45)';
-      expCtx.lineWidth = 3;
-      expCtx.strokeRect(60, 60, w - 120, h - 120);
+      // 3. Luxurious golden filigree border
+      expCtx.strokeStyle = 'rgba(255, 228, 181, 0.55)';
+      expCtx.lineWidth = 4;
+      expCtx.strokeRect(55, 55, w - 110, h - 110);
 
-      expCtx.strokeStyle = 'rgba(255, 23, 79, 0.6)';
-      expCtx.lineWidth = 1;
-      expCtx.strokeRect(75, 75, w - 150, h - 150);
+      expCtx.strokeStyle = 'rgba(255, 23, 79, 0.65)';
+      expCtx.lineWidth = 1.5;
+      expCtx.strokeRect(70, 70, w - 140, h - 140);
 
       // 4. Luminous heart header icon
       const heartX = w / 2;
-      const heartY = 320;
-      const heartSize = 70;
+      const heartY = 310;
+      const heartSize = 75;
       expCtx.save();
       expCtx.translate(heartX, heartY);
       expCtx.fillStyle = '#FF174F';
-      expCtx.shadowColor = 'rgba(255, 23, 79, 0.9)';
-      expCtx.shadowBlur = 45;
+      expCtx.shadowColor = 'rgba(255, 23, 79, 0.95)';
+      expCtx.shadowBlur = 50;
       const s = heartSize / 16;
       expCtx.beginPath();
       expCtx.moveTo(0, 0);
@@ -917,27 +1115,27 @@
       // 5. Letter Header Texts
       expCtx.textAlign = 'center';
       expCtx.fillStyle = '#FFFFFF';
-      expCtx.shadowColor = 'rgba(255, 23, 79, 0.7)';
+      expCtx.shadowColor = 'rgba(255, 23, 79, 0.75)';
       expCtx.shadowBlur = 25;
-      expCtx.font = '600 68px "Georgia", serif';
-      expCtx.fillText(`${RECIPIENT_NAME}, My Love ❤️`, w / 2, 480);
+      expCtx.font = '600 70px "Georgia", serif';
+      expCtx.fillText(`${RECIPIENT_NAME}, My Love ❤️`, w / 2, 475);
 
       expCtx.fillStyle = '#FF91C8';
-      expCtx.font = 'italic 44px "Georgia", serif';
-      expCtx.fillText('I Love You Always.', w / 2, 555);
+      expCtx.font = 'italic 46px "Georgia", serif';
+      expCtx.fillText('I Love You Always.', w / 2, 550);
 
       // Decorative divider
-      expCtx.strokeStyle = 'rgba(255, 145, 200, 0.5)';
+      expCtx.strokeStyle = 'rgba(255, 228, 181, 0.6)';
       expCtx.lineWidth = 2;
       expCtx.beginPath();
-      expCtx.moveTo(w / 2 - 180, 615);
-      expCtx.lineTo(w / 2 + 180, 615);
+      expCtx.moveTo(w / 2 - 200, 610);
+      expCtx.lineTo(w / 2 + 200, 610);
       expCtx.stroke();
 
       // 6. Letter Body
       expCtx.shadowBlur = 10;
       expCtx.fillStyle = '#FFD2E7';
-      expCtx.font = '36px "Georgia", serif';
+      expCtx.font = '37px "Georgia", serif';
       const lines = [
         'You Are Always In My Mind,',
         'In My Heart, And In My Life.',
@@ -953,36 +1151,35 @@
         'And Someone Truly Special To Me.'
       ];
 
-      let currentY = 730;
+      let currentY = 725;
       lines.forEach((line) => {
-        if (line === '') {
-          currentY += 28;
-        } else {
+        if (line === '') currentY += 28;
+        else {
           expCtx.fillText(line, w / 2, currentY);
           currentY += 58;
         }
       });
 
-      // 7. Signature
+      // 7. Signature Area
       currentY += 50;
-      expCtx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      expCtx.fillStyle = 'rgba(255, 255, 255, 0.85)';
       expCtx.font = 'italic 34px "Georgia", serif';
       expCtx.fillText('With All My Love,', w / 2, currentY);
 
       currentY += 65;
       expCtx.fillStyle = '#FFFFFF';
-      expCtx.shadowColor = 'rgba(255, 23, 79, 0.85)';
-      expCtx.shadowBlur = 30;
-      expCtx.font = '600 56px "Georgia", serif';
+      expCtx.shadowColor = 'rgba(255, 23, 79, 0.9)';
+      expCtx.shadowBlur = 35;
+      expCtx.font = '600 58px "Georgia", serif';
       expCtx.fillText(`${SENDER_NAME} ❤️`, w / 2, currentY);
 
       // 8. Footer Dedication Stamp
       expCtx.shadowBlur = 0;
-      expCtx.fillStyle = 'rgba(255, 145, 200, 0.5)';
+      expCtx.fillStyle = 'rgba(255, 228, 181, 0.65)';
       expCtx.font = '24px sans-serif';
       expCtx.fillText(`Forever in My Heart — Dedicated to ${RECIPIENT_NAME}`, w / 2, h - 110);
 
-      // 9. Prompt Download
+      // 9. Download PNG
       const dataUrl = expCanvas.toDataURL('image/png');
       const downloadLink = document.createElement('a');
       downloadLink.download = `Hasban-Raahitha-Forever.png`;
@@ -995,13 +1192,43 @@
         voiceSubtitleText.textContent = 'Love Card saved to your photos! ❤️';
       }
     } catch (err) {
-      console.error('Error generating card image:', err);
       alert('Could not export image directly in this browser. Please take a screenshot to keep this card forever ❤️');
     }
   }
 
   /* --------------------------------------------------------------------------
-     9. RESET & REPLAY EXPERIENCE ENGINE
+     10. INTERACTIVE WHISPERS MODAL ENGINE
+     -------------------------------------------------------------------------- */
+  function openWhisperModal() {
+    if (!whisperModal) return;
+    whisperModal.classList.add('is-open');
+    whisperModal.setAttribute('aria-hidden', 'false');
+    showCurrentWhisper();
+  }
+
+  function closeWhisperModal() {
+    if (!whisperModal) return;
+    whisperModal.classList.remove('is-open');
+    whisperModal.setAttribute('aria-hidden', 'true');
+  }
+
+  function showCurrentWhisper() {
+    if (!whisperQuote) return;
+    whisperQuote.style.opacity = '0';
+    setTimeout(() => {
+      whisperQuote.innerHTML = `&ldquo;${HASBAN_WHISPERS[STATE.currentWhisperIndex]}&rdquo;`;
+      whisperQuote.style.opacity = '1';
+    }, 200);
+  }
+
+  function advanceWhisper() {
+    STATE.currentWhisperIndex = (STATE.currentWhisperIndex + 1) % HASBAN_WHISPERS.length;
+    showCurrentWhisper();
+    romanticAudio.playSparkleChime();
+  }
+
+  /* --------------------------------------------------------------------------
+     11. RESET & REPLAY EXPERIENCE ENGINE
      -------------------------------------------------------------------------- */
   function replayEntireExperience() {
     narrationEngine.stopNarration();
@@ -1015,10 +1242,11 @@
     if (ambientGlow) {
       ambientGlow.classList.remove('heartbeat-active', 'split-glow');
     }
-
-    if (voicePlayBtn) {
-      voicePlayBtn.style.display = 'none';
+    if (lightRays) {
+      lightRays.classList.remove('active');
     }
+
+    if (voicePlayBtn) voicePlayBtn.style.display = 'none';
 
     STATE.currentPhase = 'INTRO';
     STATE.isAnimating = false;
@@ -1030,7 +1258,7 @@
   }
 
   /* --------------------------------------------------------------------------
-     10. EVENT LISTENERS & INITIALIZATION
+     12. EVENT LISTENERS & INITIALIZATION
      -------------------------------------------------------------------------- */
   // Main Heart Button: Click, Touch & Keyboard Accessibility
   mainHeartBtn.addEventListener('click', (e) => {
@@ -1045,7 +1273,35 @@
     }
   });
 
-  // Toolbar Actions
+  // Background Music Toggle Button
+  if (bgmToggleBtn) {
+    bgmToggleBtn.addEventListener('click', () => {
+      romanticAudio.toggleBGM();
+    });
+  }
+
+  // Whispers Modal Controls
+  if (whispersBtn) {
+    whispersBtn.addEventListener('click', () => openWhisperModal());
+  }
+  if (closeWhisperBtn) {
+    closeWhisperBtn.addEventListener('click', () => closeWhisperModal());
+  }
+  if (nextWhisperBtn) {
+    nextWhisperBtn.addEventListener('click', () => advanceWhisper());
+  }
+  if (whisperModal) {
+    whisperModal.addEventListener('click', (e) => {
+      if (e.target === whisperModal) closeWhisperModal();
+    });
+  }
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && whisperModal && whisperModal.classList.contains('is-open')) {
+      closeWhisperModal();
+    }
+  });
+
+  // Voice Toolbar Actions
   if (voicePlayBtn) {
     voicePlayBtn.addEventListener('click', () => {
       voicePlayBtn.style.display = 'none';
@@ -1087,13 +1343,11 @@
     });
   }
 
-  // Window unload cleanup
   window.addEventListener('beforeunload', () => {
     narrationEngine.stopNarration();
-    if (STATE.rafId) {
-      cancelAnimationFrame(STATE.rafId);
-    }
+    romanticAudio.stopBGM();
+    if (STATE.rafId) cancelAnimationFrame(STATE.rafId);
   });
 
-  console.info(`Raahitha — Forever In My Heart initialized with love from ${SENDER_NAME}`);
+  console.info(`Raahitha — Forever In My Heart 2.0 initialized with love from ${SENDER_NAME}`);
 })();

@@ -1,42 +1,42 @@
 # Raahitha — Forever In My Heart ❤️
-### A Cinematic Romantic Surprise Website | Hasban Zahidh → Raahitha
+### A Cinematic Romantic Surprise Website | Hasban Zahidh → Raahitha (2.0 Ultra Edition)
 
-A production-quality, mobile-first romantic experience crafted with pure vanilla web technologies.
+A production-quality, mobile-first cinematic romantic surprise crafted with pure vanilla web technologies for Raahitha.
 
 ---
 
-## ✨ Features
+## ✨ 2.0 Ultra Features
 
-- **Cinematic Visuals**: Layered luminous SVG heart, animated orbit rings, and deep dark-burgundy atmospheric gradients.
-- **Canvas 2D Particle Engine**: Hundreds of floating hearts, twinkling stars, soft bokeh orbs, rose petals, burst effects, and constellation outlines.
+- **Procedural Romantic Background Music (BGM)**: Built with zero external audio files using the native Web Audio API. Streams soothing, dreamy piano and kalimba chord progressions in F Major / D Minor, toggleable with a glowing spinning vinyl control.
+- **Interactive Cursor & Touch Fairy Dust Trail**: As Raahitha moves her finger on mobile or mouse on desktop, a trail of glowing micro-hearts, golden sparks, and starlight cascades from her touch.
+- **Shooting Stars & Cosmic Aurora**: Ethereal atmospheric nebulae with periodic shooting stars streaking across the velvet night sky.
 - **4-Stage Choreographed Heart Sequence**:
-  1. **Phase A — The Heartbeat**: Rapid pulse with synthesized sub-bass audio kicks and crimson illumination.
-  2. **Phase B — The Magical Burst**: Particle explosion with starry trails and romantic chime cascades.
+  1. **Phase A — The Heartbeat**: Rapid pulse with synchronized shockwaves, sub-bass audio kicks, and crimson illumination.
+  2. **Phase B — The Magical Burst**: Particle explosion with rotating starry trails, 3D tumbling rose petals, and romantic chime cascades.
   3. **Phase C — The Broken Heart**: Delicate separation of the heart halves with an organic glowing crack, representing emotional vulnerability.
   4. **Phase D — Love Survives**: Constellation formation with the quote *"Even A Broken Heart Can Hold An Endless Love."*
-- **Spoken Love Message**: Built using the Web Speech API with sentence-by-sentence subtitle sync and automatic fallback to an authentic voice recording (`assets/hasban-love-message.mp3`).
-- **Screenshot-Ready Mobile Wallpaper**: Framed to look like a luxury romantic wallpaper.
-- **Save Love Card**: Built-in 1080×1920 high-resolution PNG card exporter.
+- **Spoken Love Message**: Browser-native Web Speech API with sentence-by-sentence subtitle sync and automatic fallback to Hasban's authentic voice recording (`assets/hasban-love-message.mp3`).
+- **3D Parallax Card Tilt**: The romantic love letter tilts dynamically in 3D space with specular sheen reflections as the device moves.
+- **"Hasban's Whispers" Interactive Modal**: Raahitha can tap to reveal 8 intimate secret love notes written personally from Hasban Zahidh.
+- **Save Love Card Wallpaper**: 1-click exporter generating a 1080×1920 ultra high-resolution romantic mobile wallpaper.
 
 ---
 
 ## 🛠️ Technology Stack
 
 - **HTML5** (Semantic structure, inline SVGs, accessibility)
-- **CSS3** (Fluid clamp typography, dark glassmorphism, responsive animations)
-- **Vanilla JavaScript** (State machine, Web Audio API, Web Speech API, Canvas 2D)
+- **CSS3** (Fluid clamp typography, dark glassmorphism, 3D transform parallax)
+- **Vanilla JavaScript** (State machine, Web Audio synthesizer, Web Speech API, Canvas 2D engine)
 
 Zero external libraries, frameworks, or dependencies.
 
 ---
 
-## 🚀 Getting Started
-
-Simply open `index.html` in any modern web browser or deploy to GitHub Pages:
+## 🚀 Live Hosting on GitHub Pages
 
 1. Go to repository **Settings** > **Pages**.
 2. Under **Build and deployment**, select branch `main` and folder `/ (root)`.
-3. Save, and your live surprise link will be ready!
+3. Click **Save**, and your live romantic surprise link will be active!
 
 ---
 
